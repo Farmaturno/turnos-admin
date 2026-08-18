@@ -72,4 +72,14 @@ if len(farmacia.selection.rows):
 
         # 3. Botón final para guardar en AWS
         if st.button("💾 Guardar"):
-            st.success(f"Guardando en DynamoDB: {fechas_actualizadas}")
+            with st.spinner("Guardando cambios..."):
+                try:
+                    # Actualizar el registro en DynamoDB
+                    table.update_item(
+                        Key={'place_id': detalles['place_id']},
+                        UpdateExpression="SET turnos = :t",
+                        ExpressionAttributeValues={':t': fechas_actualizadas}
+                    )
+                    st.success("Cambios guardados correctamente !")
+                except Exception as e:
+                    st.error(f"Error guardando cambios: {e}")
