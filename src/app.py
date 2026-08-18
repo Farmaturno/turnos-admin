@@ -8,6 +8,7 @@ st.set_page_config(page_title="Gestión de Turnos de Farmacias",
 # Inicializar el cliente de DynamoDB
 @st.cache_resource
 def init_dynamodb():
+    print("Initializing DynamoDB resource...")
     return boto3.resource('dynamodb')
 
 dynamodb = init_dynamodb()
@@ -15,6 +16,7 @@ table = dynamodb.Table('farmaturno-farmacias-dev')
 
 @st.cache_data(ttl=60)
 def fetch_all_data():
+    print("Fetching all data from DynamoDB...")
     try:
         response = table.scan()
         return response.get('Items', [])
@@ -38,6 +40,7 @@ else:
     st.info("No records found in the DynamoDB table.")
 
 if len(farmacia.selection.rows):
+    print(f"Selected row index: {farmacia.selection.rows[0]}")
     index = farmacia.selection.rows[0]
     detalles = data[index]  # This is the selected row data
 
@@ -52,16 +55,6 @@ if len(farmacia.selection.rows):
     with col_turnos:
         st.subheader("Gestión de Turnos")
 
-        # 1. Selector de fecha individual
-        nueva_fecha = st.date_input("Selecciona una fecha para añadir:", format="YYYY-MM-DD")
-        str_fecha = nueva_fecha.strftime("%Y-%m-%d")
-
-        # Botón para agregar la fecha al array
-        if st.button("➕ Añadir Fecha"):
-            if str_fecha not in st.session_state.fechas_turno:
-                st.session_state.fechas_turno.append(str_fecha)
-                st.rerun()
-
         # 2. El "Carrito": Muestra y permite quitar fechas dispares fácilmente
         fechas_actualizadas = st.multiselect(
             "Fechas de turno asignadas (puedes borrar con la X):",
@@ -72,6 +65,7 @@ if len(farmacia.selection.rows):
 
         # 3. Botón final para guardar en AWS
         if st.button("💾 Guardar"):
+            print(f"Saving updated turnos for place_id {detalles['place_id']}: {fechas_actualizadas}")
             with st.spinner("Guardando cambios..."):
                 try:
                     # Actualizar el registro en DynamoDB
