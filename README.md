@@ -10,6 +10,7 @@ Aplicación web para la gestión centralizada de turnos de farmacias. Interfaz i
 - 💾 **Sincronización en tiempo real**: Los cambios se guardan directamente en AWS DynamoDB
 - ⚡ **Caché inteligente**: Optimización con ttl para reducir llamadas a la base de datos
 - 📱 **Interfaz responsiva**: Diseño adaptado para múltiples dispositivos
+- 🔎 **Búsqueda local**: Consulta y visualiza negocios mediante SerpAPI
 
 ## Stack Tecnológico
 
@@ -49,6 +50,15 @@ export AWS_SECRET_ACCESS_KEY=tu_secret_key
 export AWS_DEFAULT_REGION=tu_region
 ```
 
+Configura también tu clave de SerpAPI como variable de entorno:
+```bash
+export SERPAPI_API_KEY=tu_serpapi_api_key
+```
+También puedes guardarla en `.streamlit/secrets.toml`:
+```toml
+SERPAPI_API_KEY = "tu_serpapi_api_key"
+```
+
 ## Uso
 
 Inicia la aplicación con:
@@ -68,13 +78,17 @@ La aplicación se abrirá en `http://localhost:8501`
    - Elimina fechas haciendo clic en la "X" junto a cada una
    - Las fechas deben estar en el formato "YYYYMMDD". Ej. "20260817" para el 17 de Agosto de 2026.
 4. **Guardar cambios**: Haz clic en el botón "Guardar" para sincronizar con DynamoDB
+5. **Buscar negocios locales**: Abre **Búsqueda local**, indica el servicio y la ubicación, y pulsa **Buscar**
 
 ## Estructura del Proyecto
 
 ```
 turnos-admin/
 ├── src/
-│   └── app.py              # Aplicación principal Streamlit
+│   ├── app.py              # Entrada y navegación principal
+│   ├── database.py         # Acceso compartido a DynamoDB
+│   └── app_pages/          # Páginas de la aplicación
+│       └── busqueda_serpapi.py # Resultados locales de SerpAPI
 ├── Pipfile                 # Definición de dependencias
 ├── Pipfile.lock            # Lock file de dependencias
 ├── README.md               # Este archivo
