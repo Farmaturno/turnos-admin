@@ -74,7 +74,9 @@ La aplicación se abrirá en `http://localhost:8501`
 ```
 turnos-admin/
 ├── src/
-│   └── app.py              # Aplicación principal Streamlit
+│   ├── app.py              # Entrada y navegación principal
+│   ├── database.py         # Acceso compartido a DynamoDB
+│   └── app_pages/          # Páginas de la aplicación
 ├── Pipfile                 # Definición de dependencias
 ├── Pipfile.lock            # Lock file de dependencias
 ├── README.md               # Este archivo
