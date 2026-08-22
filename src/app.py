@@ -14,6 +14,7 @@ page = st.navigation(
         "": [
             st.Page("app_pages/farmacias.py", title="Farmacias", icon=":material/store:"),
             st.Page("app_pages/turnos.py", title="Gestión de turnos", icon=":material/calendar_month:"),
+            st.Page("app_pages/busqueda_serpapi.py", title="Búsqueda local", icon=":material/search:")
         ]
     },
     position="sidebar",
