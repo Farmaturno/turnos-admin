@@ -25,6 +25,7 @@ def fetch_all_data():
         return []
 
 st.title("🏪 Gestión de Turnos de Farmacias")
+st.markdown("Esta aplicación permite gestionar los turnos de las farmacias de manera interactiva. Selecciona una farmacia de la tabla para ver sus detalles y modificar sus turnos asignados.")
 
 # Fetch and visualize data inside an interactive table widget
 data = fetch_all_data()
@@ -38,6 +39,8 @@ if data:
                  )
 else:
     st.info("No records found in the DynamoDB table.")
+
+st.divider()
 
 if len(farmacia.selection.rows):
     print(f"Selected row index: {farmacia.selection.rows[0]}")
